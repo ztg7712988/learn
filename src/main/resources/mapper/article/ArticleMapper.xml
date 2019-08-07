@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dbms.article.mapper.CategoryMapper">
+    <!--分类信息表-->
+    <resultMap id="CategoryResultMap" type="CategoryTbl">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="c_id" property="parent"/>
+        <result column="crateTime" property="crateTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <!--分类和功能信息表映射-->
+    <resultMap id="FunCateMap" type="FunctionTbl">
+        <result column="id" property="id"/>
+        <result column="fun_name" property="name"/>
+        <result column="fun_url" property="img"/>
+        <result column="fun_cratetime" property="created"/>
+        <result column="fun_updatetime" property="updated"/>
+        <result column="fun_remark" property="description"/>
+        <collection property="categoryTbls" ofType="CategoryTbl"
+                    column="id" select="selectCategoryByC_id">
+        </collection>
+    </resultMap>
+
+    <resultMap id="FunCateMap1" type="CategoryTbl">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="c_id" property="parent"/>
+        <result column="crateTime" property="crateTime"/>
+        <result column="updateTime" property="updateTime"/>
+        <association property="functionTbl" javaType="FunctionTbl">
+            <result column="fun_name" property="name"/>
+            <result column="fun_url" property="img"/>
+            <result column="fun_cratetime" property="created"/>
+            <result column="fun_updatetime" property="updated"/>
+            <result column="fun_remark" property="description"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertCategory" parameterType="CategoryTbl">
+        insert into TREE_TBL (id,name,
+        c_id,
+        crateTime,
+        updateTime)
+        value (NULL,
+        #{name},
+        #{c_id},
+        #{crateTime},
+        #{updateTime})
+    </insert>
+
+    <select id="selectCategoryByAll" resultMap="CategoryResultMap">
+        select id,name,c_id,crateTime,updateTime from TREE_TBL
+    </select>
+
+    <!--根据外键查询文章分类表-->
+    <select id="selectCategoryByC_id" resultMap="CategoryResultMap" parameterType="int">
+        select id,name,c_id,crateTime,updateTime from TREE_TBL WHERE c_id = #{id}
+    </select>
+
+    <!--根据ID查询文章分类表-->
+    <select id="selectCategoryById" resultMap="CategoryResultMap" parameterType="int">
+        select id,name,c_id,crateTime,updateTime from TREE_TBL WHERE id = #{id}
+    </select>
+    <!--根据名字查询文章分类表-->
+    <select id="selectCategoryByName" resultMap="CategoryResultMap" parameterType="String">
+        select id,name,c_id,crateTime,updateTime from TREE_TBL WHERE name = #{name}
+    </select>
+
+    <!--查询功能表和分类表-->
+    <select id="selectCategoryAndFunctionMap" resultMap="FunCateMap" >
+        SELECT id,fun_name,fun_url,fun_cratetime,fun_updatetime,fun_remark FROM function_tbl
+    </select>
+
+    <!--查询功能表和分类表1-->
+    <select id="selectCategoryAndFunctionMap1" resultMap="FunCateMap1" >
+        SELECT * FROM tree_tbl t,function_tbl f where t.c_id=f.id
+    </select>
+
+    <!--根据ID查询功能表和分类表-->
+    <select id="selectFunCateById" parameterType="int" resultMap="FunCateMap1">
+        SELECT t.id, t.name, t.c_id, t.crateTime, t.updateTime,
+        f.id, f.fun_name, f.fun_url, f.fun_cratetime, f.fun_updatetime, f.fun_remark
+        FROM tree_tbl t, function_tbl f
+        WHERE t.c_id=f.id AND t.id=#{id}
+    </select>
+
+    <!--删除分类-->
+    <delete id="deleteCategory" parameterType="int">
+        delete from tree_tbl where id = #{value}
+    </delete>
+
+    <!--更新分类-->
+    <update id="updateCategoty" parameterType="CategoryTbl">
+        UPDATE tree_tbl SET name=#{name}, c_id=#{parent}, updateTime=#{updateTime} WHERE id=#{id}
+    </update>
+</mapper>

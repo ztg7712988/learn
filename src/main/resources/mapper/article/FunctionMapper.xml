@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dbms.article.mapper.FunctionMapper">
+    <resultMap id="FunctionMap" type="com.dbms.article.entity.FunctionTbl">
+        <result column="id" property="id"/>
+        <result column="fun_name" property="name"/>
+        <result column="fun_url" property="img"/>
+        <result column="fun_cratetime" property="created"/>
+        <result column="fun_updatetime" property="updated"/>
+        <result column="fun_remark" property="description"/>
+    </resultMap>
+
+    <select id="selectByAll" resultMap="FunctionMap" >
+        select id,fun_name,fun_url,fun_cratetime,fun_updatetime,fun_remark from function_tbl
+    </select>
+
+    <select id="selectFunctionById" parameterType="int" resultMap="FunctionMap">
+        SELECT id,fun_name,fun_url,fun_cratetime,fun_updatetime,fun_remark FROM function_tbl WHERE id=#{id}
+    </select>
+
+</mapper>
