@@ -57,6 +57,11 @@ public class CategoryServiceimpl implements CategoryService {
     @Override
     //更新文章分类信息
     public int updateCateCategory(CategoryTbl categoryTbl) {
+        String name = categoryTbl.getName();//定义分类名
+        //判断数据库中是否已有该分类名
+        if(categoryMapper.selectCategoryByName(name) != null){
+            return 0;
+        }
         return categoryMapper.updateCategoty(categoryTbl);
     }
 }

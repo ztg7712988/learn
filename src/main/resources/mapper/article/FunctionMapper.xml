@@ -11,12 +11,39 @@
         <result column="fun_remark" property="description"/>
     </resultMap>
 
+    <resultMap id="FunctionMap1" type="FunctionTbl">
+        <result column="id" property="id"/>
+        <result column="fun_name" property="name"/>
+        <result column="fun_url" property="img"/>
+        <result column="fun_cratetime" property="created"/>
+        <result column="fun_updatetime" property="updated"/>
+        <result column="fun_remark" property="description"/>
+        <collection property="categoryTbls" ofType="CategoryTbl"
+                    column="id" select="selectCategoryByC_Id">
+        </collection>
+    </resultMap>
+    <!--分类信息表-->
+    <resultMap id="CategoryResultMap" type="CategoryTbl">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="c_id" property="parent"/>
+        <result column="crateTime" property="crateTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+
     <select id="selectByAll" resultMap="FunctionMap" >
         select id,fun_name,fun_url,fun_cratetime,fun_updatetime,fun_remark from function_tbl
     </select>
 
-    <select id="selectFunctionById" parameterType="int" resultMap="FunctionMap">
-        SELECT id,fun_name,fun_url,fun_cratetime,fun_updatetime,fun_remark FROM function_tbl WHERE id=#{id}
+    <!--根据ID查询功能-->
+    <select id="selectFunctionById" parameterType="int" resultMap="FunctionMap1">
+        SELECT id,fun_name,fun_url,fun_cratetime,fun_updatetime,fun_remark
+        FROM function_tbl WHERE id=#{id}
+    </select>
+
+    <!--根据ID查询文章分类表-->
+    <select id="selectCategoryByC_Id" resultMap="CategoryResultMap" parameterType="int">
+        select id,name,c_id,crateTime,updateTime from TREE_TBL WHERE c_id = #{id}
     </select>
 
 </mapper>

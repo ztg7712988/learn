@@ -25,4 +25,8 @@ public interface CategoryMapper{
 
     List<CategoryTbl> selectCategoryAndFunctionMap1();
 
+    FunctionTbl selectCategoryById(int id);
+
+    CategoryTbl selectCategoryByName(String name);
+
 }

@@ -17,7 +17,7 @@ public class CategoryEditController {
     @Autowired
     CategoryService service;
 
-    //根据id查询文章信息
+    //根据id查询文章分类信息，并让前端显示所属功能信息
     @RequestMapping(value = "/categories/edit/{id}",method = RequestMethod.GET)
     public ResultInfo getEditCategory(@PathVariable(value = "id")int id){
         return service.getCategoryById(id);
@@ -30,14 +30,11 @@ public class CategoryEditController {
      * c_id：功能id
      */
     @RequestMapping(value = "/categories/edit/{id}",method = RequestMethod.POST)
-    public ResultInfo updateCategory(@PathVariable(value = "id")int id, @RequestParam(value = "name")String name,
-                                     @RequestParam(value = "parent")int c_id){
+    public ResultInfo updateCategory(/*@PathVariable(value = "id")int id,*/ @RequestBody CategoryTbl tbl){
         ResultInfo result = new ResultInfo();
-        CategoryTbl categoryTbl = new CategoryTbl();
-        categoryTbl.setId(id);
+        CategoryTbl categoryTbl = tbl;
+        /*categoryTbl.setId(id);*/
         categoryTbl.setUpdateTime(new Date());
-        categoryTbl.setName(name);
-        categoryTbl.setParent(c_id);
         try{
             if (service.updateCateCategory(categoryTbl)!=0){
                 result.setMessage("更新成功！");

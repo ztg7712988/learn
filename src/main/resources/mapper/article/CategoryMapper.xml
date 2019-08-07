@@ -64,11 +64,17 @@
     <select id="selectCategoryById" resultMap="CategoryResultMap" parameterType="int">
         select id,name,c_id,crateTime,updateTime from TREE_TBL WHERE id = #{id}
     </select>
+    <!--根据名字查询文章分类表-->
+    <select id="selectCategoryByName" resultMap="CategoryResultMap" parameterType="String">
+        select id,name,c_id,crateTime,updateTime from TREE_TBL WHERE name = #{name}
+    </select>
 
     <!--查询功能表和分类表-->
     <select id="selectCategoryAndFunctionMap" resultMap="FunCateMap" >
         SELECT id,fun_name,fun_url,fun_cratetime,fun_updatetime,fun_remark FROM function_tbl
     </select>
+
+    <!---->
 
     <!--查询功能表和分类表1-->
     <select id="selectCategoryAndFunctionMap1" resultMap="FunCateMap1" >
@@ -90,6 +96,6 @@
 
     <!--更新分类-->
     <update id="updateCategoty" parameterType="CategoryTbl">
-        UPDATE tree_tbl SET name=#{name}, c_id=#{c_id}, updateTime=#{updateTime} WHERE id=#{id}
+        UPDATE tree_tbl SET name=#{name}, c_id=#{parent}, updateTime=#{updateTime} WHERE id=#{id}
     </update>
 </mapper>

@@ -34,4 +34,9 @@ public class FunctionServiceimpl implements FunctionService {
         //放回结果
         return list;
     }
+
+    @Override
+    public FunctionTbl selectFunctionById(int id) {
+        return null;
+    }
 }

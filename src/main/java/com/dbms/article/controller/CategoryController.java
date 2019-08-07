@@ -37,10 +37,10 @@ public class CategoryController {
      * @name:文章分类名
      */
     @RequestMapping(value = "/categories/create",method = RequestMethod.POST)
-    public Object insertCategory(@RequestParam(value = "parent")int id,@RequestParam(value = "name")String name){
-        CategoryTbl category = new CategoryTbl();
-        category.setParent(id);//外键
-        category.setName(name);
+    public Object insertCategory(@RequestBody CategoryTbl categoryTbl){
+        CategoryTbl category = categoryTbl;
+        /*category.setParent(parent);//外键
+        category.setName(name);*/
 
        ResultInfo<CategoryTbl> resultInfo = new ResultInfo<CategoryTbl>();
        try {

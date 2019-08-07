@@ -1,9 +1,12 @@
 package com.dbms.article;
 
-import com.dbms.article.controller.CategoryEditController;
-import com.dbms.article.controller.CategoryListController;
-import com.dbms.article.entity.CategoryTbl;
+import com.dbms.article.controller.ArticleController;
+import com.dbms.article.entity.*;
+import com.dbms.article.mapper.AdvertiMapper;
+import com.dbms.article.mapper.ArticleMapper;
 import com.dbms.article.mapper.CategoryMapper;
+import com.dbms.article.mapper.FunctionMapper;
+import com.dbms.article.service.ArticleService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +15,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DemsApplicationTests {
 
 	@Autowired
-	CategoryMapper mapper;
+	ArticleService service;
+
 
 	@Test
 	public void contextLoads() {
-		List<CategoryTbl> list = mapper.selectCategoryAndFunctionMap1();
-		for (CategoryTbl tbl: list){
-			System.out.println(tbl.toString());
-		}
+			System.out.println(service.fiveArticle(2));
 	}
 }

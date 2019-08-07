@@ -24,16 +24,6 @@ public class CategoryListServiceimpl implements CategoryListService {
     public List<CategoryTbl> getFunctionAndCategory() {
         //获取功能和文章分类表
         List<CategoryTbl> tbls = mapper.selectCategoryAndFunctionMap1();
-        //将表封装到ResultInfo中
-        /*for (FunctionTbl functionTbl:tbls){
-            for(CategoryTbl categoryTbl:functionTbl.getCategoryTbls()){
-                *//*ResultInfo<CategoryTbl> info = new ResultInfo<CategoryTbl>();
-                info.setToken(functionTbl.getName());//封装功能名
-                info.setData(categoryTbl);//封装文章分类对象
-                results.add(info);*//*
-                list.put(functionTbl.getName(),categoryTbl);
-            }
-        }*/
         return tbls;
     }
     //删除分类表记录

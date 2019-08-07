@@ -7,7 +7,9 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -26,5 +28,7 @@ public class CategoryTbl implements Serializable {
     private Date updateTime;
 
     private FunctionTbl functionTbl;//功能对象
+
+    private List<ArticleTbl> functionTbls = new ArrayList<ArticleTbl>();//文章分类
 
 }

@@ -7,6 +7,7 @@ import com.dbms.article.util.ResultInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,14 @@ public class CategoryListController {
     //查询分类信息
     @RequestMapping("/categories/list")
     public List<CategoryTbl> getCategoryList(){
-        return service.getFunctionAndCategory();
+        List<CategoryTbl> list = service.getFunctionAndCategory();
+        List<CategoryTbl> tbls = new ArrayList<>();
+        //把文章分类的parent赋值给功能分类的id
+        for (CategoryTbl tbl:list){
+            tbl.getFunctionTbl().setId(tbl.getParent());
+            tbls.add(tbl);
+        }
+        return tbls;
     }
 
     /**

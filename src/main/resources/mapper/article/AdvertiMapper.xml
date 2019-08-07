@@ -1,74 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dbms.article.mapper.ArticleMapper">
-    <resultMap id="ArticleResultMap" type="ArticleTbl">
-        <id column="id" property="id"/>
-        <result column="title" property="title"/>
-        <result column="author" property="actor"/>
-        <result column="cuont" property="cuont"/>
-        <result column="img" property="img"/>
-        <result column="parent_id" property="category"/>
-        <result column="update_time" property="updated"/>
-        <result column="new_time" property="createdAt"/>
-        <result column="content" property="context"/>
-        <association property="categoryTbl" javaType="CategoryTbl">
-            <result column="name" property="name"/>
-            <result column="c_id" property="parent"/>
-            <result column="crateTime" property="crateTime"/>
-            <result column="updateTime" property="updateTime"/>
-        </association>
+<mapper namespace="com.dbms.article.mapper.AdvertiMapper">
+    <resultMap id="AdResultMap1" type="AdTbl">
+        <id column="ab_id" property="id"/>
+        <result column="ab_name" property="name"/>
+        <result column="ab_description" property="description"/>
+        <result column="ab_crateTime" property="crateTime"/>
+        <result column="ab_updateTime" property="updateTime"/>
+        <collection property="links" ofType="LinkTbl"
+                    column="ab_id" select="findLinkById">
+        </collection>
+    </resultMap>
+    <resultMap id="AdResultMap2" type="AdTbl">
+        <id column="ab_id" property="id"/>
+        <result column="ab_name" property="name"/>
+        <result column="ab_description" property="description"/>
+        <result column="ab_crateTime" property="crateTime"/>
+        <result column="ab_updateTime" property="updateTime"/>
+    </resultMap>
+    <resultMap id="LinkResultMap" type="LinkTbl">
+        <result column="li_parentID" property="parent"/>
+        <result column="li_img" property="img"/>
+        <result column="li_url" property="url"/>
     </resultMap>
 
-    <!--查询所有的文章信息和父功能-->
-    <select id="seclectArticleByAll" resultMap="ArticleResultMap">
-        SELECT a.id,a.title,a.author,a.cuont,a.img,a.parent_id,a.update_time,a.new_time,a.content,
-        t.name
-        FROM article_TBL a,tree_TBL t
-        WHERE a.parent_id=t.id
+    <!--插入广告位-->
+    <insert id="insertOnechLink" parameterType="linkTbl">
+        INSERT
+        INTO ab_link_tbl (li_parentID,li_img,li_url) VALUE (#{parent},#{img},#{url})
+    </insert>
+
+    <!--插入广告标题-->
+    <insert id="insetAd" parameterType="adTbl">
+        INSERT
+        INTO ab_tbl (ab_id,ab_name,ab_description,ab_crateTime,ab_updateTime) VALUE (#{id},#{name},#{description},#{crateTime},#{updateTime})
+    </insert>
+
+    <!--根据name查询广告-->
+    <select id="findAdvertiByname" parameterType="string" resultMap="AdResultMap2">
+        SELECT ab_id,ab_name,ab_description,ab_crateTime,ab_updateTime
+        FROM ab_tbl
+        WHERE ab_name=#{name}
     </select>
 
-    <!--根据id删除文章-->
-    <delete id="delecteArticleById" parameterType="int">
-        delete from article_tbl where id =#{value}
+    <!--根据id查询广告位-->
+    <select id="findLinkById" parameterType="string" resultMap="LinkResultMap">
+        SELECT li_parentID,li_img,li_url
+        FROM ab_link_tbl
+        WHERE li_parentID=#{ab_id}
+    </select>
+
+    <!--查询所有广告-->
+    <select id="findAdvertiByAll" resultMap="AdResultMap1">
+        SELECT  ab_id,ab_name,ab_description,ab_crateTime,ab_updateTime
+        FROM ab_tbl
+    </select>
+
+    <!--根据id查询广告-->
+    <select id="findAdvertiById" resultMap="AdResultMap1" parameterType="string">
+        SELECT  ab_id,ab_name,ab_description,ab_crateTime,ab_updateTime
+        FROM ab_tbl
+        WHERE ab_id=#{value}
+    </select>
+
+    <delete id="deleteAdTbl" parameterType="String">
+        DELETE FROM ab_tbl WHERE id=#{id}
     </delete>
 
-    <!--根据id查询文章信息和父功能-->
-    <select id="seclectArticleById" resultMap="ArticleResultMap" parameterType="string">
-        SELECT a.id,a.title,a.author,a.cuont,a.img,a.parent_id,a.update_time,a.new_time,a.content,
-        t.name
-        FROM article_TBL a,tree_TBL t
-        WHERE a.parent_id=t.id AND a.id = #{id}
-    </select>
+    <delete id="deleteLinkTbl" parameterType="String">
+        DELETE FROM ab_link_tbl WHERE id=#{id}
+    </delete>
 
-    <!--根据title查询文章-->
-    <select id="seclectArticleByTitle" resultMap="ArticleResultMap" parameterType="string">
-        SELECT id,title,author,cuont,img,parent_id,update_time,new_time,content
-        FROM article_TBL
-        WHERE title=#{value}
-    </select>
-
-    <!--插入文章-->
-    <insert id="insertArticle" parameterType="ArticleTbl">
-        insert into ARTICLE_TBL (id,
-            title,
-            author,
-            cuont,
-            img,
-            parent_id,
-            update_time,
-            new_time,
-            content
-        ) value (
-            #{id},
-            #{title},
-            #{actor},
-            #{cuont},
-            #{img},
-            #{category},
-            #{updated},
-            #{createdAt},
-            #{context})
-    </insert>
+    <!--更新广告-->
+    <update id="updateAdverti" parameterType="AdTbl">
+        UPDATE ab_tbl SET ab_name=#{name},ab_description=#{description},ab_updateTime=#{updateTime} WHERE ab_id=#{id}
+    </update>
 
 </mapper>

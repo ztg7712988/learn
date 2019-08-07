@@ -9,4 +9,6 @@ import java.util.List;
 public interface  FunctionService {
 
     List<FunctionTbl> getListUI();
+
+    FunctionTbl selectFunctionById(int id);
 }
